@@ -181,9 +181,19 @@
         });
 
         // ================== WebSocket 消息监听 ==================
-        const websocket = new WebSocket("wss://infinity.deno.dev");
-        let chats = JSON.parse(localStorage.getItem("chats")) || {};
+        // 动态判断环境（本地/生产）
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const wsProtocol = isLocal ? 'ws' : 'wss';
+        const wsHost = isLocal ? 'localhost:8000' : 'infinity.deno.dev'; // 替换为实际部署域名
+        
+        const websocket = new WebSocket(`${wsProtocol}://${wsHost}`);
+        
+        let chats = {};
 
+        websocket.addEventListener("open", () => {console.log("WebSocket 已连接");});
+        websocket.addEventListener("error", (error) => {console.error("WebSocket 连接错误:", error);});
+        
+        
         // 获取 DOM 元素
         const chatList = document.getElementById("chat-list");
         const messagesDiv = document.getElementById("messages");
@@ -199,8 +209,41 @@
             });
         }
 
-        // 初始化 UI
-        function initUI() {
+        // ================== 历史数据加载 ==================
+        async function loadHistory() {
+            try {
+                const response = await fetch('/history');
+                if (!response.ok) throw new Error('加载失败');
+                const history = await response.json();
+
+                // 转换服务器数据格式
+                history.forEach(entry => {
+                    const data = JSON.parse(entry.value);
+                    if (!chats[data.sender]) {
+                        chats[data.sender] = {
+                            name: data.sender,
+                            lastTime: data.time,
+                            messageCount: 1,
+                            messages: [{ time: data.time }]
+                        };
+                    } else {
+                        chats[data.sender].lastTime = data.time;
+                        chats[data.sender].messageCount += 1;
+                        chats[data.sender].messages.push({ time: data.time });
+                    }
+                });
+
+                console.log('历史数据加载完成:', chats);
+            } catch (error) {
+                console.error('加载历史消息失败:', error);
+                alert('无法加载历史消息，请刷新页面');
+            }
+        }
+
+        // ================== 初始化逻辑 ==================
+        async function initUI() {
+            await loadHistory(); // 先加载历史数据
+
             // 加载聊天列表
             for (const sender in chats) {
                 const chat = chats[sender];
@@ -314,9 +357,10 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // 监听 WebSocket 消息
+        // ================== WebSocket 监听 ==================
         websocket.addEventListener("message", (event) => {
             const data = JSON.parse(event.data);
+            console.log("收到服务器消息:", data);
             const { sender, content, time } = data;
 
             // 更新聊天列表
@@ -336,13 +380,13 @@
             }
 
             // 更新右侧聊天窗口
-            updateChatWindow(sender);
+            updateChatWindow(data.sender);
 
             // 播放提示音
             playNotificationSound();
 
             // 保存数据到 localStorage
-            localStorage.setItem("chats", JSON.stringify(chats));
+            //localStorage.setItem("chats", JSON.stringify(chats));
 
             // 生成一个气泡
             const center = getImageCenter();
@@ -353,11 +397,11 @@
                 (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1)
             );
             bubbles.push(newBubble);
-            localStorage.setItem('bubbles', JSON.stringify(bubbles));
+            //localStorage.setItem('bubbles', JSON.stringify(bubbles));
         });
 
         // 初始化UI
-        initUI();
+        window.addEventListener('load', initUI);
     </script>
 </body>
 </html>
