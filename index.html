@@ -180,17 +180,6 @@
             //localStorage.setItem('bubbles', JSON.stringify(bubbles));
         });
 
-        // ================== 消息发送逻辑 ==================
-        function sendMessage() {
-          const messageData = {
-            const input = document.querySelector('.search-input'); // 假设这是输入框
-            sender: "用户",      // 需替换为实际用户名
-            content: "消息内容", // 获取输入框内容
-            time: new Date().toLocaleTimeString("zh-CN", { hour: '2-digit', minute: '2-digit' })
-          };
-            websocket.send(JSON.stringify(messageData));
-            input.value = ""; // 清空输入框
-        }
         
         // ================== WebSocket 消息监听 ==================
         // 动态判断环境（本地/生产）
