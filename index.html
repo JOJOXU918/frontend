@@ -180,6 +180,18 @@
             //localStorage.setItem('bubbles', JSON.stringify(bubbles));
         });
 
+        // ================== 消息发送逻辑 ==================
+        function sendMessage() {
+          const messageData = {
+            const input = document.querySelector('.search-input'); // 假设这是输入框
+            sender: "用户",      // 需替换为实际用户名
+            content: "消息内容", // 获取输入框内容
+            time: new Date().toLocaleTimeString("zh-CN", { hour: '2-digit', minute: '2-digit' })
+          };
+            websocket.send(JSON.stringify(messageData));
+            input.value = ""; // 清空输入框
+        }
+        
         // ================== WebSocket 消息监听 ==================
         // 动态判断环境（本地/生产）
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -212,9 +224,16 @@
         // ================== 历史数据加载 ==================
         async function loadHistory() {
             try {
+                const apiUrl = isLocal ? 'http://localhost:8000/history' : '/history';
+
                 const response = await fetch('/history');
-                if (!response.ok) throw new Error('加载失败');
+                if (!response.ok) {
+                    console.error('HTTP状态码:', response.status);
+                    throw new Error('加载失败');
+                }
+
                 const history = await response.json();
+                console.log('正在请求:', history); // 添加此行
 
                 // 转换服务器数据格式
                 history.forEach(message => {
