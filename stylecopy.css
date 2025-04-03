@@ -553,3 +553,40 @@ body {
             z-index: 998; /* 气泡在中间层 */
             pointer-events: none;
         }
+
+/* 移动端样式（屏幕宽度小于 768px） */
+@media (max-width: 768px) {
+    .wechat-container {
+      flex-direction: column; /* 改为垂直布局 */
+    }
+    
+    .sidebar {
+      width: 100% !important; /* 全宽度 */
+      height: 40vh !important; /* 限制高度 */
+    }
+    
+    .chat-window {
+      width: 100% !important;
+      height: 60vh !important;
+    }
+    
+    .menu-bar {
+      flex-direction: row; /* 图标横向排列 */
+      justify-content: space-around;
+    }
+    
+    .message-box {
+      max-width: 80% !important; /* 缩小消息框 */
+    }
+  }
+  
+  /* 平板样式（768px~1024px） */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .sidebar {
+      width: 35% !important;
+    }
+    
+    .chat-window {
+      width: 65% !important;
+    }
+  }
