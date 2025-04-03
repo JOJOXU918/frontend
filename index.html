@@ -224,8 +224,6 @@
         // ================== 历史数据加载 ==================
         async function loadHistory() {
             try {
-                const apiUrl = isLocal ? 'http://localhost:8000/history' : '/history';
-
                 const response = await fetch('/history');
                 if (!response.ok) {
                     console.error('HTTP状态码:', response.status);
