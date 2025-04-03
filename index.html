@@ -186,7 +186,7 @@
         const wsProtocol = isLocal ? 'ws' : 'wss';
         const wsHost = isLocal ? 'localhost:8000' : 'infinity.deno.dev'; // 替换为实际部署域名
         
-        const websocket = new WebSocket("wss://infinity.deno.dev");
+        const websocket = new WebSocket(`${wsProtocol}://${wsHost}`);
         
         let chats = {};
 
