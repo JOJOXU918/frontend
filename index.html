@@ -186,7 +186,7 @@
         const wsProtocol = isLocal ? 'ws' : 'wss';
         const wsHost = isLocal ? 'localhost:8000' : 'infinity.deno.dev'; // 替换为实际部署域名
         
-        const websocket = new WebSocket(`${wsProtocol}://${wsHost}`);
+        const websocket = new WebSocket("wss://infinity.deno.dev");
         
         let chats = {};
 
@@ -212,9 +212,9 @@
         // ================== 历史数据加载 ==================
         async function loadHistory() {
             try {
-                const backendUrl = "http://infinity.deno.dev";
+                const backendUrl = "https://infinity.deno.dev";
                 const response = await fetch(`${backendUrl}/history`);
-                
+
                 if (!response.ok) {
                     console.error('HTTP状态码:', response.status);
                     throw new Error('加载失败');
