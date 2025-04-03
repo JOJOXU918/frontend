@@ -182,11 +182,11 @@
 
         // ================== WebSocket 消息监听 ==================
         // 动态判断环境（本地/生产）
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const wsProtocol = isLocal ? 'ws' : 'wss';
-        const wsHost = isLocal ? 'localhost:8000' : 'infinity.deno.dev'; // 替换为实际部署域名
+        const isLocal = window.location.hostname === 'localhost';
+        const backendHost = isLocal ? 'localhost:8000' : 'infinity.deno.dev';
+        const backendUrl = `https://${backendHost}`; // 始终使用 HTTPS
         
-        const websocket = new WebSocket(`${wsProtocol}://${wsHost}`);
+        const websocket = new WebSocket(`wss://${backendHost}`);
         
         let chats = {};
 
