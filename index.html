@@ -177,7 +177,7 @@
 
         // 窗口大小变化处理
         window.addEventListener('resize', () => {
-            localStorage.setItem('bubbles', JSON.stringify(bubbles));
+            //localStorage.setItem('bubbles', JSON.stringify(bubbles));
         });
 
         // ================== WebSocket 消息监听 ==================
@@ -217,19 +217,19 @@
                 const history = await response.json();
 
                 // 转换服务器数据格式
-                history.forEach(entry => {
-                    const data = JSON.parse(entry.value);
-                    if (!chats[data.sender]) {
-                        chats[data.sender] = {
-                            name: data.sender,
-                            lastTime: data.time,
+                history.forEach(message => {
+                    const { sender, time, content } = message;
+                    if (!chats[sender]) {
+                        chats[sender] = {
+                            name: sender,
+                            lastTime: time,
                             messageCount: 1,
-                            messages: [{ time: data.time }]
+                            messages: [{ time, content }] // 添加 content 字段
                         };
                     } else {
-                        chats[data.sender].lastTime = data.time;
-                        chats[data.sender].messageCount += 1;
-                        chats[data.sender].messages.push({ time: data.time });
+                        chats[sender].messages.push({ time, content });
+                        chats[sender].messageCount += 1;
+                        chats[sender].lastTime = time;
                     }
                 });
 
