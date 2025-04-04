@@ -72,30 +72,42 @@
 
     <script>
         // ================== 气泡生成逻辑 ==================
-        //let bubbles = JSON.parse(localStorage.getItem('bubbles') || '[]');
-
-        // 修改后（从服务器加载）
-        async function loadBubblesFromServer() {
-            try {
-                const backendUrl = "https://infinity.deno.dev"; // 你的 Deno Deploy 地址
-                const response = await fetch(`${backendUrl}/load-bubbles`);
-                if (!response.ok) throw new Error("加载失败");
-    
-                const bubblesData = await response.json();
-                bubbles = bubblesData;
-                initBubbles();
-            } catch (error) {
-                console.error("加载气泡失败:", error);
-                bubbles = [];
-            }
-        }
+        let bubbles = [];
 
         // 初始化气泡
-        function initBubbles() {
-            bubbles.forEach(bubble => {
-                createBubble(bubble.x, bubble.y, bubble.vx, bubble.vy);
-            });
-        }
+// 初始化气泡（改为从服务器加载）
+async function initBubbles() {
+  try {
+    // 从服务器加载气泡数据
+    const response = await fetch('https://infinity.deno.dev/load-bubbles');
+    if (!response.ok) throw new Error('加载失败');
+    bubbles = await response.json();
+    
+    // 创建气泡
+    bubbles.forEach(bubble => {
+      createBubble(bubble.x, bubble.y, bubble.vx, bubble.vy);
+    });
+  } catch (error) {
+    console.error('加载气泡失败:', error);
+    bubbles = [];
+  }
+}
+     
+// 保存气泡到服务器
+async function saveBubbles() {
+  try {
+    const response = await fetch('https://infinity.deno.dev/save-bubbles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bubbles)
+    });
+    
+    if (!response.ok) throw new Error('保存失败');
+    console.log('气泡已保存');
+  } catch (error) {
+    console.error('保存气泡失败:', error);
+  }
+}
 
         // 获取图片顶部中心坐标
         function getImageCenter() {
@@ -156,9 +168,7 @@
             }
 
             animate();
-            return { x, y, vx, vy,
-                element: bubble // 如果不需要 DOM 引用可删除此项
-             };
+            return { x, y, vx, vy };
         }
 
         // 测试用 - 添加气泡
@@ -176,12 +186,11 @@
         function clearBubbles() {
             document.querySelectorAll('.bubble').forEach(bubble => bubble.remove());
             bubbles = [];
-            localStorage.removeItem('bubbles');
+            saveBubbles(); // 新代码
         }
 
         // 初始化现有气泡
-        window.addEventListener('load', async() => {
-            await loadBubblesFromServer(); // 优先加载服务器数据
+        window.addEventListener('load', () => {
             initBubbles();
             
             // 添加键盘事件监听
@@ -194,25 +203,11 @@
             });
         });
 
-        async function saveBubblesToServer() {
-            try {
-                const backendUrl = "https://infinity.deno.dev"; // 你的 Deno Deploy 地址
-                const response = await fetch(`${backendUrl}/save-bubbles`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(bubbles)
-                });
-    
-                if (!response.ok) throw new Error("保存失败");
-                console.log("气泡数据已保存");
-                } catch (error) {
-                console.error("保存气泡失败:", error);
-            }
-        }
-
         // 窗口大小变化处理
-        window.addEventListener('beforeunload', saveBubblesToServer); // 页面关闭前保存
-        window.addEventListener('resize', saveBubblesToServer);// 窗口调整时保存
+        window.addEventListener('resize', () => {
+            //localStorage.setItem('bubbles', JSON.stringify(bubbles));
+            saveBubbles()
+        });
 
         // ================== WebSocket 消息监听 ==================
         // 动态判断环境（本地/生产）
