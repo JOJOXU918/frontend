@@ -31,19 +31,6 @@
         }
     </style>
     </head>
-    <body>
-        <!-- 新增移动端提示 -->
-        <div class="mobile-message">嘿嘿 被骗了吧</div>
-    
-        <!-- 原有所有内容保持不变 -->
-        <div id="bubble-container"></div>
-        <img src="assets/icons/assHD.png" alt="左上角图标" class="corner-logo">
-        <div class="wechat-container">
-            <!-- 原有完整结构保持不变 -->
-        </div>
-    </body>
-    </html>
-
     <link rel="stylesheet" href="stylecopy.css">
     <!-- 添加音频元素（支持 m4a 和 mp3） -->
     <audio id="notification-sound">
@@ -51,8 +38,8 @@
         <source src="assets/sounds/notification.mp3" type="audio/mpeg">
         您的浏览器不支持音频播放。
     </audio>
-</head>
 <body>
+    <div class="mobile-message">这里啥都没，你被骗了</div>
     <!-- 气泡容器 -->
     <div id="bubble-container"></div>
 
@@ -109,6 +96,8 @@
             </div>
         </div>
     </div>
+</body>
+</html>
 
     <script>
         // ================== 气泡生成逻辑 ==================
