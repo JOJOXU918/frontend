@@ -556,37 +556,63 @@ body {
 
 /* 移动端样式（屏幕宽度小于 768px） */
 @media (max-width: 768px) {
+    /* 整体布局调整为垂直排列 */
     .wechat-container {
-      flex-direction: column; /* 改为垂直布局 */
+      flex-direction: column;
     }
-    
+  
+    /* 左侧菜单栏调整为底部导航栏 */
+    .menu-bar {
+      flex-direction: row !important;
+      justify-content: space-around;
+      height: 60px;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #f5f5f5;
+      z-index: 1000;
+    }
+  
+    /* 左侧聊天列表全屏显示 */
     .sidebar {
-      width: 100% !important; /* 全宽度 */
-      height: 40vh !important; /* 限制高度 */
+      width: 100% !important;
+      height: 50vh !important; /* 限制高度 */
+      margin-bottom: 60px; /* 给底部菜单留空间 */
     }
-    
+  
+    /* 右侧聊天窗口全屏显示 */
     .chat-window {
       width: 100% !important;
-      height: 60vh !important;
+      height: 50vh !important;
     }
-    
-    .menu-bar {
-      flex-direction: row; /* 图标横向排列 */
-      justify-content: space-around;
-    }
-    
+  
+    /* 消息框缩小宽度 */
     .message-box {
-      max-width: 80% !important; /* 缩小消息框 */
+      max-width: 80% !important;
+    }
+  
+    /* 输入栏按钮放大 */
+    .input-bar button {
+      padding: 12px 20px;
+      font-size: 16px;
+    }
+  
+    /* 左上角图标缩小 */
+    .corner-logo {
+      width: 40px;
+      height: 40px;
     }
   }
   
-  /* 平板样式（768px~1024px） */
-  @media (min-width: 768px) and (max-width: 1024px) {
+/* ================== 平板适配（768px ~ 1024px） ================== */
+@media (min-width: 769px) and (max-width: 1024px) {
     .sidebar {
       width: 35% !important;
     }
-    
+  
     .chat-window {
       width: 65% !important;
     }
   }
+
