@@ -174,14 +174,12 @@ async function saveBubbles() {
         // 测试用 - 添加气泡
         function addTestBubble() {
             const center = getImageCenter();
-            const newBubble =createBubble(
+            createBubble(
                 center.x,
                 center.y,
                 (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1),
                 (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1)
             );
-            bubbles.push(newBubble);
-            saveBubbles(); // 调用保存函数
         }
 
         // 测试用 - 清除所有气泡
@@ -203,7 +201,16 @@ async function saveBubbles() {
             // 添加键盘事件监听
             document.addEventListener('keydown', (e) => {
                 if (e.key === '8') {
-                    addTestBubble();
+                    const center = getImageCenter();
+        // 生成气泡并保存
+        const newBubble = createBubble(
+            center.x,
+            center.y,
+            (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1),
+            (Math.random() * 3 + 1) * (Math.random() > 0.5 ? 1 : -1)
+        );
+        bubbles.push(newBubble); // 更新数组
+        saveBubbles();           // 手动保存
                 } else if (e.key === '5') {
                     clearBubbles();
                 }
