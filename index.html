@@ -186,7 +186,12 @@ async function saveBubbles() {
         function clearBubbles() {
             document.querySelectorAll('.bubble').forEach(bubble => bubble.remove());
             bubbles = [];
-            saveBubbles(); // 新代码
+  // 原代码：localStorage.removeItem('bubbles')
+  fetch('https://infinity.deno.dev/save-bubbles', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify([]) // 存储空数组
+  });
         }
 
         // 初始化现有气泡
@@ -203,11 +208,19 @@ async function saveBubbles() {
             });
         });
 
-        // 窗口大小变化处理
-        window.addEventListener('resize', () => {
-            //localStorage.setItem('bubbles', JSON.stringify(bubbles));
-            saveBubbles()
-        });
+// 窗口大小变化时保存（替换 localStorage.setItem）
+window.addEventListener('resize', async () => {
+  // 原代码：localStorage.setItem('bubbles', JSON.stringify(bubbles))
+  try {
+    await fetch('https://infinity.deno.dev/save-bubbles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bubbles)
+    });
+  } catch (error) {
+    console.error('保存气泡失败:', error);
+  }
+});
 
         // ================== WebSocket 消息监听 ==================
         // 动态判断环境（本地/生产）
