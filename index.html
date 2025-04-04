@@ -156,7 +156,9 @@
             }
 
             animate();
-            return { x, y, vx, vy };
+            return { x, y, vx, vy,
+                element: bubble // 如果不需要 DOM 引用可删除此项
+             };
         }
 
         // 测试用 - 添加气泡
