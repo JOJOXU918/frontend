@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFINITY</title>
     <link rel="stylesheet" href="stylecopy.css">
+
+    <style>
+        /* ================== 移动端专属样式 ================== */
+        .mobile-only {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-gif {
+            width: min(50vw, 400px);
+            height: auto;
+        }
+
+        @media (hover: none) and (pointer: coarse), (max-width: 1024px) {
+            /* 隐藏网页端所有内容 */
+            .desktop-content {
+                display: none !important;
+            }
+            
+            /* 显示移动端内容 */
+            .mobile-only {
+                display: flex;
+            }
+            
+        }
+    </style>
+
     <!-- 添加音频元素（支持 m4a 和 mp3） -->
     <audio id="notification-sound">
         <source src="assets/sounds/notification.m4a" type="audio/mp4">
@@ -13,6 +49,13 @@
     </audio>
 </head>
 <body>
+     <!-- 移动端内容 -->
+     <div class="mobile-only">
+        <img src="assets/images/mock.gif" class="mobile-gif" alt="提示动画">
+    </div>
+
+    <!-- 网页端内容容器 -->
+    <div class="desktop-content">
     <!-- 气泡容器 -->
     <div id="bubble-container"></div>
 
@@ -461,5 +504,6 @@ window.addEventListener('resize', async () => {
         // 初始化UI
         window.addEventListener('load', initUI);
     </script>
+    </div>
 </body>
 </html>
