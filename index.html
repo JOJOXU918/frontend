@@ -4,33 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFINITY</title>
-    <style>
-        /* ================== 移动设备提示 ================== */
-        .mobile-message {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2rem;
-            color: #ff0000;
-            text-align: center;
-            z-index: 9999;
-        }
-
-        @media (max-width: 1024px) {
-            /* 隐藏所有内容 */
-            body > *:not(.mobile-message) {
-                display: none !important;
-            }
-            
-            /* 显示提示信息 */
-            .mobile-message {
-                display: block;
-            }
-        }
-    </style>
-    </head>
     <link rel="stylesheet" href="stylecopy.css">
     <!-- 添加音频元素（支持 m4a 和 mp3） -->
     <audio id="notification-sound">
@@ -38,8 +11,8 @@
         <source src="assets/sounds/notification.mp3" type="audio/mpeg">
         您的浏览器不支持音频播放。
     </audio>
+</head>
 <body>
-    <div class="mobile-message">这里啥都没，你被骗了</div>
     <!-- 气泡容器 -->
     <div id="bubble-container"></div>
 
@@ -96,8 +69,6 @@
             </div>
         </div>
     </div>
-</body>
-</html>
 
     <script>
         // ================== 气泡生成逻辑 ==================
