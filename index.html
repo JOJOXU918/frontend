@@ -337,7 +337,7 @@ window.addEventListener('resize', async () => {
                 console.log('历史数据加载完成:', chats);
             } catch (error) {
                 console.error('加载历史消息失败:', error);
-                alert('无法加载历史消息，请刷新页面');
+                console.warn('加载历史消息失败（不影响页面使用）:', error);
             }
         }
 
